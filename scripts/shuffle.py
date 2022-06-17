@@ -9,6 +9,7 @@ slash = "/" if os.name != "nt" else "\\"
 
 groups = {"male": [], "female": [], "legendary": []}
 total_assets = 0
+group_weights = ['male'] * 65 + ['female'] * 25 + ['legendary'] * 10
 
 for group, _ in groups.items():
     group_path = f"{rootdir}{slash}{group}{slash}json{slash}"
@@ -20,12 +21,10 @@ for group, _ in groups.items():
 
 
 def get_random_group_asset():
-    random_group_idx = random.randint(0, len(groups.keys())-1)
-    random_group = list(groups.keys())[random_group_idx]
+    random_group = random.choice(group_weights)
 
     if len(groups[random_group]) > 0:
         random_asset_idx = random.randint(0, len(groups[random_group]) - 1)
-        print(random_asset_idx, random_group, groups[random_group])
         chosen_asset = groups[random_group][random_asset_idx]
         groups[random_group].pop(random_asset_idx)
         return random_group, chosen_asset
@@ -51,6 +50,7 @@ for i in range(1, total_assets + 1):
         metadata = json.load(file)
 
     metadata['image'] = metadata['image'].replace(str(assigned_asset_idx), str(i))
+    metadata['name'] = metadata['name'].replace(str(assigned_asset_idx), str(i))
 
     with open(to_metadata_dest, "w") as file:
         file.write(json.dumps(metadata, indent=2))
