@@ -12,12 +12,13 @@ total_assets = 0
 group_weights = ['male'] * 65 + ['female'] * 25 + ['legendary'] * 10
 
 for group, _ in groups.items():
-    group_path = f"{rootdir}{slash}{group}{slash}json{slash}"
-    group_size = len(next(os.walk(group_path))[2])
+    group_path = f"{rootdir}{slash}{group}{slash}images{slash}"
+    files_in_group = next(os.walk(group_path))[2]
+    group_size = len(files_in_group)
     groups[group] = group_size
 
     total_assets += group_size
-    groups[group] = [i for i in range(1, group_size + 1)]
+    groups[group] = [int(file.split(".")[0]) for file in files_in_group]
 
 
 def get_random_group_asset():
