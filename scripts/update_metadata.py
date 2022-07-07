@@ -37,6 +37,17 @@ for data in metadata:
     if not gender_exists:
         data['attributes'].append({'trait_type': 'Gender', 'value': f'{group.capitalize()}'})
 
+    title_exists = False
+    for traits in data['attributes']:
+        if traits['trait_type'] == 'Position Title':
+            title_exists = True
+            break
+
+    if not title_exists:
+        data['attributes'].append({'trait_type': 'Position Title', 'value': 'Coworker'})
+
+    data['image'] = data['image'].replace("ipfs://NewUriToReplace/", "to-be-replaced")
+
 for i in range(1, group_size+1):
     with open(f"{group_path}{slash}{i}.json", "w") as file:
         file.write(json.dumps(metadata[i - 1], indent=2))
